@@ -28,3 +28,8 @@ project.cap_deployer.stages = ['staging','production']
 h2. Facts
 
 p. *Important:* this plugin assumes you are using ssh keys for deployment
+
+h2. Authors
+
+* Original version written by Eric Lucas: http://jira.public.thoughtworks.org/browse/CCRB-117
+* Additional improvements by Alberto Perdomo
