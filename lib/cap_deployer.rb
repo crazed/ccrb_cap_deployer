@@ -8,14 +8,11 @@
 # Set the email addresses which should be notified about deployment
 # project.cap_deployer.emails = ['email@example.com']
 #
-# Pass an array of stages you want to deploy to
-# project.cap_deployer.stages = ['staging','production']
 #
 # Important: this plugin assumes you are using ssh keys for deployment
 #
 class CapDeployer
   attr_accessor :emails
-  attr_accessor :stages
   attr_writer :from
  
   def initialize(project = nil)
@@ -41,19 +38,17 @@ class CapDeployer
   def deploy(build)
     logger.info DateTime.now.strftime("%Y-%m-%d %H:%M:%S") + " cap_deployer: Starting deployment"
     path = build.project.path + "/work/"
-    for stage in @stages
-      success = system "cd #{path} && cap #{stage.to_s} deploy > #{build.artifacts_directory}/cap_deploy_#{stage.to_s}.txt"
-      logger.info DateTime.now.strftime("%Y-%m-%d %H:%M:%S") + " cap_deployer: Deploying to stage #{stage} #{success ? 'successful' : 'failed'}"
-      notify(success, build, stage.to_s)
-    end
+    success = system "cd #{path} && cap deploy > #{build.artifacts_directory}/cap_deploy.txt"
+    logger.info DateTime.now.strftime("%Y-%m-%d %H:%M:%S") + " cap_deployer: Deployment #{success ? 'successful' : 'failed'}"
+    notify(success, build, stage.to_s)
     logger.info DateTime.now.strftime("%Y-%m-%d %H:%M:%S") + " cap_deployer: Finished deployment"
   end
  
   def notify(success, build, stage)
     if success
-      email :deliver_build_report, build, "#{build.project.name} build #{build.label} has been deployed to stage #{stage}", "The build was deployed to stage #{stage}."
+      email :deliver_build_report, build, "#{build.project.name} build #{build.label} has been deployed", "The build was deployed."
     else
-      email :deliver_build_report, build, "#{build.project.name} build #{build.label} could not be deployed to stage #{stage}", "The build could not be deployed to stage #{stage}."
+      email :deliver_build_report, build, "#{build.project.name} build #{build.label} could not be deployed", "The build could not be deployed."
     end
   end
  

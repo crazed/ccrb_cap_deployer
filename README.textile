@@ -4,7 +4,7 @@ p. This plugin will deploy your app using capistrano.
 
 h2. How it works
 
-p. If the build fails the app won't de be deployed and if it passes it will try to deploy to a list of stages you can supply.
+p. If the build fails the app won't de be deployed and if it passes it will try to deploy using cap deploy.
 It will send an email notifying if it was successful or not and a special artifact with the capistrano output will be created.
 
 h2. Installation
@@ -18,11 +18,6 @@ p. In your project's cruise_config.rb file:
 Set the email addresses which should be notified about deployment: 
 <pre><code>
 project.cap_deployer.emails = ['email@example.com']
-</code></pre>
-
-Pass an array of stages you want to deploy to
-<pre><code>
-project.cap_deployer.stages = ['staging','production']
 </code></pre>
 
 h2. Facts
